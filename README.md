@@ -43,7 +43,17 @@ cd wall-ctl
 ## Usage
 
 ```bash
-wallctl install IMAGE [-t HH:MM]
-wallctl remove ID
-wallctl show
+usage: wall_ctl.py [-h] {install,remove,show} ...
+
+Wallpaper management tool
+
+positional arguments:
+  {install,remove,show}
+                        Action to perform
+    install             Install a wallpaper
+    remove              Remove a wallpaper
+    show                Show the current configuration
+
+options:
+  -h, --help            show this help message and exit
 ```
