@@ -73,12 +73,17 @@ def prepare_config(user) -> Path:
 
 
 def get_next_id(schedule: Dict[str, Dict[str, str]]) -> int:
-    pass
+    new_id = 0
+    for _, entry in schedule.items():
+        if entry.get("id") > id:
+            new_id = entry.get("id") + 1
+
+    return new_id
 
 
-def validate_time(time_str: str) -> bool:
+def validate_time(time: str) -> bool:
     try:
-        datetime.strptime(time_str, "%H:%M")
+        datetime.strptime(time, "%H:%M")
         return True
     except ValueError:
         return False
@@ -124,6 +129,26 @@ def handle_remove(schedule: ScheduleDict, config_path: Path, args: argparse.Name
     print(f"Successfully removed wallpaper with id='{id}'!")
 
 
+def handle_show(schedule: ScheduleDict) -> None:
+    now = datetime.now()
+    image = None
+
+    print(f"*** ACTIVE DYNAMIC BACKGROUNDS FOR '{user}' ***")
+    for time, entry in schedule.items():
+        hour, minute = map(int, time.split(":"))
+        if now.replace(hour=hour, minute=minute) <= now:
+            image = entry.get("image")
+
+        print(f"- {entry.get('image')} @ {time} (ID={entry.get('id')})")
+
+    if image:
+        success = os.system(f'gsettings set "{SCHEMA}" picture-uri "file://{image}"')
+        if success != 0:
+            print(f"\nAn error occurred when trying to change background! [{success}]")
+        else:
+            print(f"\nSuccessfully updated background! ({image})")
+
+
 def main() -> None:
     
     parser = setup_parser()
@@ -158,7 +183,7 @@ def main() -> None:
             handle_remove(schedule, config_path, args)
 
         case "show":
-            pass
+            handle_show(schedule)
 
         case _:
             parser.print_help()
