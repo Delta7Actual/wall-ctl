@@ -2,7 +2,7 @@
 WallCTL - time-based dynamic wallpaper manager.
 
 This script can manage wallpapers which switch
-automatically based on current system time. 
+automatically based on current system time.
 
 Dependencies:
     - crontab
@@ -28,19 +28,21 @@ def setup_parser() -> argparse.ArgumentParser:
     """
 
     parser = argparse.ArgumentParser(description="Wallpaper management tool")
-    subparsers = parser.add_subparsers(dest="command", help="Action to perform")
+    subparsers = parser.add_subparsers(dest="command", required=True, help="Action to perform")
     
     # Install command
     install_parser = subparsers.add_parser("install", help="Install a wallpaper")
     install_parser.add_argument("image", help="Path to the image to use")
-    install_parser.add_argument("-t", "--time", help="The time on which the wallpaper will be set [HH:MM]")
+    install_parser.add_argument("-t", "--time", required=True, help="The time on which the wallpaper will be set [HH:MM]")
+    install_parser.add_argument("-i", "--id", help="ID to use for the image job")
     
     # Remove command
     remove_parser = subparsers.add_parser("remove", help="Remove a wallpaper")
-    remove_parser.add_argument("id", help="ID of the wallpaper to remove")
+    remove_parser.add_argument("-i", "--id", required=True, help="ID of the wallpaper to remove")
     
     # Show command
     show_parser = subparsers.add_parser("show", help="Show the current configuration")
+
 
     return parser
 
