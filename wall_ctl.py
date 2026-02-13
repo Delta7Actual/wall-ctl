@@ -75,7 +75,7 @@ def get_next_id(schedule: Dict[str, Dict[str, str]]) -> int:
     new_id = 0
     for _, entry in schedule.items():
         id_ = entry.get("id")
-        if id_ > new_id:
+        if id_ >= new_id:
             new_id = id_ + 1
     return new_id
 
