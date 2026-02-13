@@ -138,20 +138,26 @@ def handle_show(schedule: ScheduleDict, user: str) -> None:
     image_to_apply = None
 
     print(f"*** ACTIVE DYNAMIC BACKGROUNDS FOR '{user}' ***")
-    for time_str, entry in sorted(schedule.items()):
+    
+    past_entries = []
+    for time_str, entry in schedule.items():
         hour, minute = map(int, time_str.split(":"))
         scheduled_time = now.replace(hour=hour, minute=minute, second=0, microsecond=0)
         if scheduled_time <= now:
-            image_to_apply = entry.get("image")
+            past_entries.append((scheduled_time, entry))
 
         print(f"- {entry.get('image')} @ {time_str} (ID={entry.get('id')})")
 
-    if image_to_apply:
+    if past_entries:
+        latest_entry = max(past_entries, key=lambda x: x[0])
+        image_to_apply = latest_entry[1].get("image")
+
         success = os.system(f'gsettings set "{SCHEMA}" picture-uri "file://{image_to_apply}"')
         if success != 0:
             print(f"\nAn error occurred when trying to change background! [{success}]")
         else:
             print(f"\nSuccessfully updated background! ({image_to_apply})")
+
 
 
 def main() -> None:
