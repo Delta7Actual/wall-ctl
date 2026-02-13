@@ -18,8 +18,15 @@ esac
 
 # Download the Python script
 echo -n "Retrieving code... "
+
+REPO_ID="1152304608"
+
+REPO_INFO=$(curl -s "https://api.github.com/repositories/$REPO_ID")
+OWNER=$(echo "$REPO_INFO" | grep -o '"full_name": "[^"]*"' | cut -d'"' -f4 | cut -d'/' -f1)
+REPO=$(echo "$REPO_INFO" | grep -o '"name": "[^"]*"' | head -1 | cut -d'"' -f4)
+
 curl -fsSL \
-    "https://raw.githubusercontent.com/Delta7Actual/wall-ctl/refs/heads/main/wall_ctl.py" \
+    "https://raw.githubusercontent.com/$OWNER/$REPO/refs/heads/main/wall_ctl.py" \
     -o "$TEMP_FILE"
 echo "DONE"
 
