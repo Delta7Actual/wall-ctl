@@ -74,7 +74,7 @@ def get_next_id(schedule: Dict[str, Dict[str, str]]) -> int:
     """Generate the next numeric ID for a wallpaper entry."""
     new_id = 0
     for _, entry in schedule.items():
-        id_ = int(entry.get("id"))
+        id_ = entry.get("id")
         if id_ > new_id:
             new_id = id_ + 1
     return new_id
@@ -112,10 +112,11 @@ def handle_install(schedule: ScheduleDict, config_path: Path, args: argparse.Nam
 
 def handle_remove(schedule: ScheduleDict, config_path: Path, args: argparse.Namespace) -> None:
     """Handle the remove command."""
-    id_ = args.id
+    id_ = int(args.id)
     found = False
 
     for time_str, entry in list(schedule.items()):
+
         if entry.get("id") == id_:
             del schedule[time_str]
             found = True
