@@ -43,6 +43,10 @@ EOF
 
     chmod +x "$SYSTEM_PREFIX/bin/wallctl"
 
+    # Schedule wallpaper change
+    CRON_JOB="* * * * * /usr/local/bin/wallctl show"
+    (crontab -l 2>/dev/null | grep -v "wallctl"; echo "$CRON_JOB") | crontab -
+
     echo "DONE"
 
 else
@@ -62,6 +66,10 @@ exec python3 "$HOME/.local/lib/wallctl/wall_ctl.py" "$@"
 EOF
 
     chmod +x "$USER_PREFIX/bin/wallctl"
+
+    # Schedule wallpaper change
+    CRON_JOB="* * * * * $HOME/.local/bin/wallctl show"
+    (crontab -l 2>/dev/null | grep -v "wallctl"; echo "$CRON_JOB") | crontab -
 
     echo "DONE"
 fi
