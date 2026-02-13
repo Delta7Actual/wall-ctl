@@ -74,8 +74,9 @@ def get_next_id(schedule: Dict[str, Dict[str, str]]) -> int:
     """Generate the next numeric ID for a wallpaper entry."""
     new_id = 0
     for _, entry in schedule.items():
-        if entry.get("id") > new_id:
-            new_id = entry.get("id") + 1
+        id_ = int(entry.get("id"))
+        if id_ > new_id:
+            new_id = id_ + 1
     return new_id
 
 
